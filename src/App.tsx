@@ -3,7 +3,6 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import ThemesPage from './pages/ThemesPage';
 import TasksPage from './pages/ExperimentsPage';
-import LabWorksPage from './pages/LabsPage';
 
 const { Header, Content, Footer } = Layout;
 
@@ -19,9 +18,6 @@ const App: React.FC = () => {
           <Menu.Item key="2">
             <Link to="/experiments">Эксперименты</Link>
           </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/labs">Лабораторные работы</Link>
-          </Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: '0 50px' }}>
@@ -29,7 +25,6 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/themes" element={<ThemesPage />} />
             <Route path="/experiments" element={<TasksPage />} />
-            <Route path="/labs" element={<LabWorksPage />} />
           </Routes>
         </div>
       </Content>
