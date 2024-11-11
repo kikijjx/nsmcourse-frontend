@@ -3,7 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import ThemesPage from './pages/ThemesPage';
 import TasksPage from './pages/ExperimentsPage';
-import ThemeDetailPage from './pages/ThemeDetailPage';
+import ThemeContentPage from './pages/ThemeContentPage';
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,7 +25,7 @@ const App: React.FC = () => {
         <div className="site-layout-content">
           <Routes>
             <Route path="/themes" element={<ThemesPage />} />
-            <Route path="/themes/:id" element={<ThemeDetailPage />} />
+            <Route path="/themes/:themeId" element={<ThemeContentPage />} />
             <Route path="/experiments" element={<TasksPage />} />
 
           </Routes>

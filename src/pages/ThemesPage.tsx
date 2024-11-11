@@ -1,6 +1,5 @@
-// ThemesPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Импортируем Link
 import { getThemes } from '../services/themeService';
 
 interface Theme {
@@ -12,7 +11,6 @@ interface Theme {
 const ThemesPage: React.FC = () => {
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchThemes = async () => {
@@ -39,9 +37,9 @@ const ThemesPage: React.FC = () => {
       <ul>
         {themes.map((theme) => (
           <li key={theme.id}>
-            <h2 onClick={() => navigate(`/themes/${theme.id}`)} style={{ cursor: 'pointer' }}>
-              {theme.title}
-            </h2>
+            <Link to={`/themes/${theme.id}`}> {/* Переход на страницу с контентом */}
+              <h2>{theme.title}</h2>
+            </Link>
           </li>
         ))}
       </ul>
