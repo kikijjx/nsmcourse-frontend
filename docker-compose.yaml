@@ -1,10 +1,12 @@
-version: '3'
+version: '3.8'
+
 services:
-  app:
+  frontend:
     build: .
     ports:
-      - "3000:3000"
+      - "5173:5173"
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/app
+    environment:
+      - NODE_ENV=development
     command: npm run dev

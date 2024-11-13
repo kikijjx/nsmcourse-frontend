@@ -1,9 +1,10 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import ThemesPage from './pages/ThemesPage';
-import TasksPage from './pages/ExperimentsPage';
+import ExperimentsPage from './pages/ExperimentsPage';
 import ThemeContentPage from './pages/ThemeContentPage';
+import ExperimentContentPage from './pages/ExperimentContentPage';
 
 const { Header, Content, Footer } = Layout;
 
@@ -24,9 +25,11 @@ const App: React.FC = () => {
       <Content style={{ padding: '0 50px' }}>
         <div className="site-layout-content">
           <Routes>
+            <Route path="/" element={<Navigate to="/themes" replace />} />
             <Route path="/themes" element={<ThemesPage />} />
             <Route path="/themes/:themeId" element={<ThemeContentPage />} />
-            <Route path="/experiments" element={<TasksPage />} />
+            <Route path="/experiments" element={<ExperimentsPage />} />
+            <Route path="/experiments/:experimentId" element={<ExperimentContentPage />} />
 
           </Routes>
         </div>

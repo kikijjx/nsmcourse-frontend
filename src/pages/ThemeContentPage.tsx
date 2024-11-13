@@ -4,12 +4,12 @@ import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { getThemeById } from '../services/themeService';
 
 interface Content {
-  type: string; // например, "text" или "formula"
+  type: string;
   value: string;
 }
 
 const ThemeContentPage: React.FC = () => {
-  const { themeId } = useParams<{ themeId: string }>(); // Получаем ID темы из URL
+  const { themeId } = useParams<{ themeId: string }>(); 
   console.log('Полученные данные ID темы:', themeId);
   const [theme, setTheme] = useState<{ title: string; content: Content[] }>({ title: '', content: [] });
   const [loading, setLoading] = useState(true);
@@ -17,8 +17,8 @@ const ThemeContentPage: React.FC = () => {
   useEffect(() => {
     const fetchTheme = async () => {
       try {
-        const data = await getThemeById(Number(themeId)); // Получаем данные по ID
-        console.log('Полученные данные темы:', data); // Логируем полученные данные
+        const data = await getThemeById(Number(themeId));
+        console.log('Полученные данные темы:', data);
         setTheme(data);
       } catch (error) {
         console.error('Ошибка получения темы:', error);
