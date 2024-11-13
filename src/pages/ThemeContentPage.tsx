@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getThemeById } from '../services/themeService'; // Функция для получения одной темы по ID
+import { MathJax, MathJaxContext } from 'better-react-mathjax';
+import { getThemeById } from '../services/themeService';
 
 interface Content {
   type: string; // например, "text" или "formula"
@@ -9,14 +10,14 @@ interface Content {
 
 const ThemeContentPage: React.FC = () => {
   const { themeId } = useParams<{ themeId: string }>(); // Получаем ID темы из URL
-  console.log('AAAAAAAAAAAA', themeId);
+  console.log('Полученные данные ID темы:', themeId);
   const [theme, setTheme] = useState<{ title: string; content: Content[] }>({ title: '', content: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTheme = async () => {
       try {
-        const data = await getThemeById(Number(themeId));
+        const data = await getThemeById(Number(themeId)); // Получаем данные по ID
         console.log('Полученные данные темы:', data); // Логируем полученные данные
         setTheme(data);
       } catch (error) {
@@ -25,7 +26,6 @@ const ThemeContentPage: React.FC = () => {
         setLoading(false);
       }
     };
-    
 
     fetchTheme();
   }, [themeId]);
@@ -37,14 +37,18 @@ const ThemeContentPage: React.FC = () => {
   return (
     <div>
       <h1>{theme.title}</h1>
-      <div>
+      <MathJaxContext>
         {theme.content.map((item, index) => (
           <div key={index}>
             {item.type === 'text' && <p>{item.value}</p>}
-            {item.type === 'formula' && <div dangerouslySetInnerHTML={{ __html: item.value }} />} {/* Поддержка формул */}
+            {item.type === 'formula' && (
+              <MathJax inline dynamic>
+                {item.value}
+              </MathJax>
+            )}
           </div>
         ))}
-      </div>
+      </MathJaxContext>
     </div>
   );
 };
