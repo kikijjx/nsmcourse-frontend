@@ -7,7 +7,34 @@ export const getThemes = async () => {
   return response.data;
 };
 
-export const getThemeById = async (id: number) => {
-  const response = await axios.get(`${API_URL}/themes/${id}`);
+export const getTheme = async (themeId: number) => {
+  const response = await axios.get(`${API_URL}/themes/${themeId}`);
+  return response.data;
+};
+
+export const createTheme = async (data: { title: string, description: string, content: any[], course_id: number }) => {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  const response = await axios.post(`${API_URL}/themes?token=${token}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.data;
+};
+
+
+
+export const updateTheme = async (themeId: number, themeData: {
+  title: string;
+  description: string;
+  content: string;
+  course_id: number;
+}) => {
+  const response = await axios.put(`${API_URL}/themes/${themeId}`, themeData);
   return response.data;
 };

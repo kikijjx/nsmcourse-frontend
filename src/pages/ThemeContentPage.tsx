@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
-import { getThemeById } from '../services/themeService';
+import { getTheme } from '../services/themeService';
 
 interface Content {
   type: string;
@@ -10,14 +10,13 @@ interface Content {
 
 const ThemeContentPage: React.FC = () => {
   const { themeId } = useParams<{ themeId: string }>(); 
-  console.log('Полученные данные ID темы:', themeId);
   const [theme, setTheme] = useState<{ title: string; content: Content[] }>({ title: '', content: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTheme = async () => {
       try {
-        const data = await getThemeById(Number(themeId));
+        const data = await getTheme(Number(themeId));
         console.log('Полученные данные темы:', data);
         setTheme(data);
       } catch (error) {

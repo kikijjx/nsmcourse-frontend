@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // Импортируем Link
+import { Link } from 'react-router-dom';
 import { getThemes } from '../services/themeService';
 
 interface Theme {
@@ -8,7 +8,7 @@ interface Theme {
   description: string;
 }
 
-const ThemesPage: React.FC = () => {
+const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,12 +34,22 @@ const ThemesPage: React.FC = () => {
   return (
     <div>
       <h1>ТЕМЫ</h1>
+      {isAdmin && (
+        <button>
+          <Link to="/themes/new">Добавить тему</Link>
+        </button>
+      )}
       <ul>
         {themes.map((theme) => (
           <li key={theme.id}>
-            <Link to={`/themes/${theme.id}`}> {/* Переход на страницу с контентом */}
+            <Link to={`/themes/${theme.id}`}>
               <h2>{theme.title}</h2>
             </Link>
+            {isAdmin && (
+              <button>
+                <Link to={`/themes/${theme.id}/edit`}>Редактировать</Link>
+              </button>
+            )}
           </li>
         ))}
       </ul>
