@@ -6,8 +6,8 @@ const EditThemePage: React.FC = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [content, setContent] = useState<{ type: string, value: string }[]>([]); // Тип массива объектов
-  const [courseId, setCourseId] = useState(1); // Заменить на правильное значение
+  const [content, setContent] = useState<{ type: string, value: string }[]>([]);
+  const [courseId, setCourseId] = useState(1);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const EditThemePage: React.FC = () => {
         const theme = await getTheme(Number(themeId));
         setTitle(theme.title);
         setDescription(theme.description);
-        setContent(theme.content); // Получаем содержание как массив объектов
+        setContent(theme.content);
         setCourseId(theme.course_id);
       } catch (err) {
         setError('Ошибка при загрузке темы');
@@ -33,10 +33,18 @@ const EditThemePage: React.FC = () => {
     setContent(updatedContent);
   };
 
+  const addContentItem = () => {
+    setContent([...content, { type: 'text', value: '' }]);
+  };
+
+  const removeContentItem = (index: number) => {
+    const updatedContent = content.filter((_, i) => i !== index);
+    setContent(updatedContent);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Преобразуем content в строку перед отправкой на сервер
       await updateTheme(Number(themeId), { title, description, content, course_id: courseId });
       navigate(`/themes/${themeId}`);
     } catch (err) {
@@ -85,8 +93,10 @@ const EditThemePage: React.FC = () => {
                 onChange={(e) => handleContentChange(index, 'value', e.target.value)}
                 required
               />
+              <button type="button" onClick={() => removeContentItem(index)}>Удалить</button>
             </div>
           ))}
+          <button type="button" onClick={addContentItem}>Добавить содержимое</button>
         </div>
 
         <div>
