@@ -29,12 +29,17 @@ export const createTheme = async (data: { title: string, description: string, co
 
 
 
-export const updateTheme = async (themeId: number, themeData: {
-  title: string;
-  description: string;
-  content: string;
-  course_id: number;
-}) => {
-  const response = await axios.put(`${API_URL}/themes/${themeId}`, themeData);
+export const updateTheme = async (themeId: number, themeData: { title: string; description: string; content: any[]; course_id: number }) => {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  const response = await axios.put(`${API_URL}/themes/${themeId}?token=${token}`, themeData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
   return response.data;
 };

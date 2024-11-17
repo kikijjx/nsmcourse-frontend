@@ -11,8 +11,8 @@ const LoginPage: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
   const handleLogin = async () => {
     try {
       const token = await login(email, password);
-      localStorage.setItem('access_token', token); // Сохраняем токен под ключом 'access_token'
-      onLogin(); // Обновляем состояние в App
+      localStorage.setItem('access_token', token);
+      onLogin();
       navigate('/themes');
     } catch (err) {
       setError('Неверные данные для входа');

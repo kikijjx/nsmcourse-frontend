@@ -28,12 +28,12 @@ const CreateThemePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log('Submitting theme:', { title, description, content, course_id: courseId }); // Use content as an array directly
+      console.log('Submitting theme:', { title, description, content, course_id: courseId });
     
-      await createTheme({ title, description, content, course_id: courseId }); // Pass content as an array (not a string)
+      await createTheme({ title, description, content, course_id: courseId });
       navigate('/themes');
     } catch (err) {
-      console.error('Error creating theme:', err); // Log the error
+      console.error('Error creating theme:', err);
       setError('Ошибка при создании темы');
     }
   };

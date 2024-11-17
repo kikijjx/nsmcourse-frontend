@@ -37,9 +37,7 @@ const EditThemePage: React.FC = () => {
     e.preventDefault();
     try {
       // Преобразуем content в строку перед отправкой на сервер
-      const contentString = JSON.stringify(content);
-
-      await updateTheme(Number(themeId), { title, description, content: contentString, course_id: courseId });
+      await updateTheme(Number(themeId), { title, description, content, course_id: courseId });
       navigate(`/themes/${themeId}`);
     } catch (err) {
       setError('Ошибка при обновлении темы');
