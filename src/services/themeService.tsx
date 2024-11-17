@@ -43,3 +43,18 @@ export const updateTheme = async (themeId: number, themeData: { title: string; d
 
   return response.data;
 };
+
+export const deleteTheme = async (themeId: number) => {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  const response = await axios.delete(`${API_URL}/themes/${themeId}?token=${token}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.data;
+};

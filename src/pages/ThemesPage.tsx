@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getThemes } from '../services/themeService';
+import { getThemes, deleteTheme } from '../services/themeService';
 
 interface Theme {
   id: number;
@@ -11,6 +11,7 @@ interface Theme {
 const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchThemes = async () => {
@@ -19,6 +20,7 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
         setThemes(data);
       } catch (error) {
         console.error('Ошибка получения списка тем:', error);
+        setError('Ошибка при загрузке тем');
       } finally {
         setLoading(false);
       }
@@ -26,6 +28,19 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
 
     fetchThemes();
   }, []);
+
+  const handleDelete = async (themeId: number) => {
+    const confirmDelete = window.confirm('Вы уверены, что хотите удалить эту тему?');
+    if (confirmDelete) {
+      try {
+        await deleteTheme(themeId);
+        setThemes(themes.filter(theme => theme.id !== themeId));
+      } catch (error) {
+        console.error('Ошибка при удалении темы:', error);
+        setError('Ошибка при удалении темы');
+      }
+    }
+  };
 
   if (loading) {
     return <div>Загрузка...</div>;
@@ -39,6 +54,7 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
           <Link to="/themes/new">Добавить тему</Link>
         </button>
       )}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <ul>
         {themes.map((theme) => (
           <li key={theme.id}>
@@ -46,9 +62,12 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
               <h2>{theme.title}</h2>
             </Link>
             {isAdmin && (
-              <button>
-                <Link to={`/themes/${theme.id}/edit`}>Редактировать</Link>
-              </button>
+              <div>
+                <button>
+                  <Link to={`/themes/${theme.id}/edit`}>Редактировать</Link>
+                </button>
+                <button onClick={() => handleDelete(theme.id)}>Удалить</button>
+              </div>
             )}
           </li>
         ))}
