@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTheme, updateTheme } from '../services/themeService';
+import FormulaInput from './FormulaInput';
 
 const EditThemePage: React.FC = () => {
   const { themeId } = useParams<{ themeId: string }>();
@@ -42,10 +43,20 @@ const EditThemePage: React.FC = () => {
     setContent(updatedContent);
   };
 
+  const prepareContentForSubmit = () => {
+    return content.map(item => {
+      if (item.type === 'formula') {
+        item.value = `$$${item.value}$$`;
+      }
+      return item;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await updateTheme(Number(themeId), { title, description, content, course_id: courseId });
+      const preparedContent = prepareContentForSubmit();
+      await updateTheme(Number(themeId), { title, description, content: preparedContent, course_id: courseId });
       navigate(`/themes/${themeId}`);
     } catch (err) {
       setError('Ошибка при обновлении темы');
@@ -76,7 +87,7 @@ const EditThemePage: React.FC = () => {
             required
           />
         </div>
-        
+
         <div>
           <label htmlFor="content">Содержание</label>
           {content.map((item, index) => (
@@ -88,15 +99,28 @@ const EditThemePage: React.FC = () => {
                 <option value="text">Текст</option>
                 <option value="formula">Формула</option>
               </select>
-              <textarea
-                value={item.value}
-                onChange={(e) => handleContentChange(index, 'value', e.target.value)}
-                required
-              />
-              <button type="button" onClick={() => removeContentItem(index)}>Удалить</button>
+              {item.type === 'text' ? (
+                <textarea
+                  value={item.value}
+                  onChange={(e) => handleContentChange(index, 'value', e.target.value)}
+                  required
+                />
+              ) : (
+                <div>
+                  <FormulaInput
+                    value={item.value}
+                    onChange={(value) => handleContentChange(index, 'value', value)}
+                  />
+                </div>
+              )}
+              <button type="button" onClick={() => removeContentItem(index)}>
+                Удалить
+              </button>
             </div>
           ))}
-          <button type="button" onClick={addContentItem}>Добавить содержимое</button>
+          <button type="button" onClick={addContentItem}>
+            Добавить содержимое
+          </button>
         </div>
 
         <div>
