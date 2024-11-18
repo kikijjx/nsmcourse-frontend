@@ -87,7 +87,7 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
               )}
             >
               <p>{theme.description ? theme.description : 'Описание отсутствует'}</p>
-              <Link to={`/themes/${theme.id}`}>Подробнее</Link>
+              <Link to={`/themes/${theme.id}`}>Открыть</Link>
             </Card>
           </Col>
         ))}

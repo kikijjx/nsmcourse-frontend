@@ -43,7 +43,7 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
 
   const prepareContentForSubmit = () => {
     return content.map(item => {
-      if (item.type === "formula") {
+      if (item.type === "formula" && !item.value.startsWith("$$") && !item.value.endsWith("$$")) {
         item.value = `$$${item.value}$$`;
       }
       return item;
