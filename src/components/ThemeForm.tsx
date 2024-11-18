@@ -79,7 +79,6 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            required
           />
         </div>
 
