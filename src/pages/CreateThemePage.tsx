@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { createTheme } from "../services/themeService";
-import ThemeForm from "./ThemeForm";
+import ThemeForm from "../components/ThemeForm";
 
 const CreateThemePage: React.FC = () => {
   const navigate = useNavigate();

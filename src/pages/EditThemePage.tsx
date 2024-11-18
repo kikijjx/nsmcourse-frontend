@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTheme, updateTheme } from "../services/themeService";
-import ThemeForm from "./ThemeForm";
+import ThemeForm from "../components/ThemeForm";
 
 const EditThemePage: React.FC = () => {
   const { themeId } = useParams<{ themeId: string }>();
