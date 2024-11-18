@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import FormulaForm from "./FormulaForm";
+import { Input, Button, Form, Select } from "antd";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import FormulaInput from "./FormulaForm";
 
 interface ThemeFormProps {
   initialData?: {
@@ -62,71 +64,72 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
     <div>
       <h1>{initialData ? "Редактировать тему" : "Создать новую тему"}</h1>
       {error || errorMessage && <p style={{ color: "red" }}>{error || errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Заголовок</label>
-          <input
+      <Form onSubmitCapture={handleSubmit}>
+        <Form.Item label="Заголовок" required>
+          <Input
             id="title"
-            type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label htmlFor="description">Описание</label>
-          <textarea
+        </Form.Item>
+
+        <Form.Item label="Описание">
+          <Input.TextArea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            rows={4}
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="content">Содержание</label>
+        <Form.Item label="Содержание" required>
           {content.map((item, index) => (
             <div key={index} style={{ marginBottom: "10px" }}>
-              <select
+              <Select
                 value={item.type}
-                onChange={(e) => handleContentChange(index, "type", e.target.value)}
+                onChange={(value) => handleContentChange(index, "type", value)}
+                style={{ width: "120px" }}
               >
-                <option value="text">Текст</option>
-                <option value="formula">Формула</option>
-              </select>
+                <Select.Option value="text">Текст</Select.Option>
+                <Select.Option value="formula">Формула</Select.Option>
+              </Select>
               {item.type === "text" ? (
-                <textarea
+                <Input.TextArea
                   value={item.value}
                   onChange={(e) => handleContentChange(index, "value", e.target.value)}
                   required
                 />
               ) : (
-                <FormulaForm
+                <FormulaInput
                   value={item.value}
                   onChange={(value) => handleContentChange(index, "value", value)}
                 />
               )}
-              <button type="button" onClick={() => removeContentItem(index)}>
-                Удалить
-              </button>
+              <MinusCircleOutlined onClick={() => removeContentItem(index)} />
             </div>
           ))}
-          <button type="button" onClick={addContentItem}>
+          <Button
+            type="dashed"
+            icon={<PlusOutlined />}
+            onClick={addContentItem}
+          >
             Добавить содержимое
-          </button>
-        </div>
+          </Button>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="courseId">Курс</label>
-          <input
+        <Form.Item label="Курс">
+          <Input
             id="courseId"
             type="number"
             value={courseId}
             onChange={(e) => setCourseId(Number(e.target.value))}
             required
           />
-        </div>
-        <button type="submit">{initialData ? "Сохранить изменения" : "Создать"}</button>
-      </form>
+        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          {initialData ? "Сохранить изменения" : "Создать"}
+        </Button>
+      </Form>
     </div>
   );
 };
