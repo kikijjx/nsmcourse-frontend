@@ -3,3 +3,36 @@
   line-height: 1.5;
   font-weight: 400;
 }
+
+body {
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  min-height: 100vh;
+}
+
+.site-layout-content {
+  padding: 24px;
+  background: #fff;
+  min-height: 380px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card-container .ant-card {
+  width: 30%;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

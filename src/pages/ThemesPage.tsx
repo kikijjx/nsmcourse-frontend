@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getThemes, deleteTheme } from '../services/themeService';
+import { Card, Button, Row, Col, message } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface Theme {
   id: number;
   title: string;
-  description: string;
+  description?: string; // Описание может быть необязательным
 }
 
 const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
@@ -35,6 +37,7 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
       try {
         await deleteTheme(themeId);
         setThemes(themes.filter(theme => theme.id !== themeId));
+        message.success('Тема успешно удалена');
       } catch (error) {
         console.error('Ошибка при удалении темы:', error);
         setError('Ошибка при удалении темы');
@@ -50,29 +53,45 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
     <div>
       <h1>ТЕМЫ</h1>
       {isAdmin && (
-        <button>
+        <Button type="primary" style={{ marginBottom: 20 }}>
           <Link to="/themes/new">Добавить тему</Link>
-        </button>
+        </Button>
       )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <ul>
+      <Row gutter={16}>
         {themes.map((theme) => (
-          <li key={theme.id}>
-            <Link to={`/themes/${theme.id}`}>
-              <h2>{theme.title}</h2>
-            </Link>
-              <h3>{theme.description}</h3>
-            {isAdmin && (
-              <div>
-                <button>
-                  <Link to={`/themes/${theme.id}/edit`}>Редактировать</Link>
-                </button>
-                <button onClick={() => handleDelete(theme.id)}>Удалить</button>
-              </div>
-            )}
-          </li>
+          <Col span={8} key={theme.id}>
+            <Card
+              title={theme.title}
+              bordered={false}
+              extra={isAdmin && (
+                <div>
+                  <Button
+                    type="link"
+                    icon={<EditOutlined />}
+                    style={{ padding: 0 }}
+                    size="small"
+                  >
+                    <Link to={`/themes/${theme.id}/edit`}>Редактировать</Link>
+                  </Button>
+                  <Button
+                    type="link"
+                    icon={<DeleteOutlined />}
+                    style={{ padding: 0, marginLeft: 10 }}
+                    size="small"
+                    onClick={() => handleDelete(theme.id)}
+                  >
+                    Удалить
+                  </Button>
+                </div>
+              )}
+            >
+              <p>{theme.description ? theme.description : 'Описание отсутствует'}</p>
+              <Link to={`/themes/${theme.id}`}>Подробнее</Link>
+            </Card>
+          </Col>
         ))}
-      </ul>
+      </Row>
     </div>
   );
 };
