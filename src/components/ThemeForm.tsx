@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaInput from "./FormulaInput";
+import FormulaForm from "./FormulaForm";
 
 interface ThemeFormProps {
   initialData?: {
@@ -100,7 +100,7 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
                   required
                 />
               ) : (
-                <FormulaInput
+                <FormulaForm
                   value={item.value}
                   onChange={(value) => handleContentChange(index, "value", value)}
                 />

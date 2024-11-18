@@ -7,7 +7,7 @@ interface FormulaInputProps {
   onChange: (value: string) => void;
 }
 
-const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange }) => {
+const FormulaForm: React.FC<FormulaInputProps> = ({ value, onChange }) => {
     const handleInput = (event: React.FormEvent<MathfieldElement>) => {
         onChange((event.target as MathfieldElement).getValue());
       };
@@ -21,4 +21,4 @@ const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange }) => {
   );
 };
 
-export default FormulaInput;
+export default FormulaForm;

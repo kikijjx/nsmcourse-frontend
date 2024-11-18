@@ -61,6 +61,7 @@ const ThemesPage: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
             <Link to={`/themes/${theme.id}`}>
               <h2>{theme.title}</h2>
             </Link>
+              <h3>{theme.description}</h3>
             {isAdmin && (
               <div>
                 <button>
