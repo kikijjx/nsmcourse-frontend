@@ -1,12 +1,5 @@
 import React from "react";
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "math-field": React.DetailedHTMLProps<React.HTMLAttributes<MathfieldElement>, MathfieldElement>;
-    }
-  }
-}
 import "//unpkg.com/mathlive";
 
 interface FormulaInputProps {
@@ -15,9 +8,9 @@ interface FormulaInputProps {
 }
 
 const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange }) => {
-  const handleInput = (event: React.ChangeEvent<HTMLElement>) => {
-    onChange(event.target.value);
-  };
+    const handleInput = (event: React.FormEvent<MathfieldElement>) => {
+        onChange((event.target as MathfieldElement).getValue());
+      };
 
   return (
     <math-field
