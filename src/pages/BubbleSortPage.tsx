@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import ChartComponent from '../components/ChartComponent'; // Импортируем новый компонент для графика
 
 const bubbleSort = (arr: number[]) => {
   const n = arr.length;
@@ -67,12 +64,14 @@ const ExperimentContentPage: React.FC = () => {
   const handleRunExperiment = () => {
     const array = Array.from({ length: numElements }, () => Math.floor(Math.random() * 1000));
 
+    // Для последовательного вычисления
     const startSeq = performance.now();
     const seqResult = bubbleSort([...array]);
     const endSeq = performance.now();
     setSequenceResult(seqResult);
     setSequenceTime(endSeq - startSeq);
 
+    // Для параллельного вычисления
     const startPar = performance.now();
     parallelBubbleSort([...array], numThreads).then((parResult) => {
       const endPar = performance.now();
@@ -153,10 +152,8 @@ const ExperimentContentPage: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ height: '400px', width: '100%' }}>
-        <h2>График времени выполнения</h2>
-        <Line data={chartData} />
-      </div>
+      {/* Используем компонент для отображения графика */}
+      <ChartComponent chartData={chartData} />
     </div>
   );
 };

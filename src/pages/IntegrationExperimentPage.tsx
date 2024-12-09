@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ChartComponent from '../components/ChartComponent';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -84,7 +85,6 @@ const IntegrationExperimentPage: React.FC = () => {
 
   const handleRunExperiment = () => {
     const funcString = functions[selectedFunction].toString();
-
     const func = functions[selectedFunction];
 
     const startSeq = performance.now();
@@ -99,6 +99,7 @@ const IntegrationExperimentPage: React.FC = () => {
       setParallelResult(parResult);
       setParallelTime(endPar - startPar);
 
+      // Обновление данных для графика
       setChartData((prevData) => ({
         ...prevData,
         labels: [...prevData.labels, `n=${n}, threads=${numThreads}`],
@@ -131,6 +132,23 @@ const IntegrationExperimentPage: React.FC = () => {
         },
       ],
     });
+  };
+
+  const generateFunctionGraph = () => {
+    const xValues = Array.from({ length: n + 1 }, (_, i) => a + i * (b - a) / n);
+    const yValues = xValues.map((x) => functions[selectedFunction](x));
+
+    return {
+      labels: xValues,
+      datasets: [
+        {
+          label: `f(x) = ${selectedFunction === 'x2' ? 'x^2' : selectedFunction === 'sin' ? 'sin(x)' : 'cos(x)'}`,
+          data: yValues,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          tension: 0.1,
+        },
+      ],
+    };
   };
 
   return (
@@ -178,7 +196,10 @@ const IntegrationExperimentPage: React.FC = () => {
 
       <button onClick={handleRunExperiment}>Интегрировать</button>
       <button onClick={handleClearChart}>Очистить график</button>
-
+      <div style={{ height: '400px' }}>
+        <h3>График функции</h3>
+        <Line data={generateFunctionGraph()} />
+      </div>
       <div>
         <h2>Результаты</h2>
         <p>Последовательный способ: {sequentialTime} мс</p>
@@ -187,10 +208,9 @@ const IntegrationExperimentPage: React.FC = () => {
         <p>Параллельный результат: {parallelResult}</p>
       </div>
 
-      <div style={{ height: '400px', width: '100%' }}>
-        <h2>График времени выполнения</h2>
-        <Line data={chartData} />
-      </div>
+      
+
+      <ChartComponent chartData={chartData} />
     </div>
   );
 };
