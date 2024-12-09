@@ -4,7 +4,7 @@ import { Layout, Menu } from 'antd';
 import ThemesPage from './pages/ThemesPage';
 import ExperimentsPage from './pages/ExperimentsPage';
 import ThemeContentPage from './pages/ThemeContentPage';
-import ExperimentContentPage from './pages/ExperimentContentPage';
+import ExperimentContentPage from './pages/BubbleSortPage';
 import LoginPage from './pages/LoginPage';
 import CreateThemePage from './pages/CreateThemePage';
 import EditThemePage from './pages/EditThemePage';
@@ -48,7 +48,8 @@ const App: React.FC = () => {
             <Route path="/themes/new" element={<CreateThemePage />} />
             <Route path="/themes/:themeId/edit" element={<EditThemePage />} />
             <Route path="/experiments" element={<ExperimentsPage />} />
-            <Route path="/experiments/:experimentId" element={<ExperimentContentPage />} />
+            <Route path="/experiments/bubble-sort" element={<ExperimentContentPage />} />
+
             <Route path="/login" element={<LoginPage onLogin={() => setIsAdmin(true)} />} />
           </Routes>
         </div>
