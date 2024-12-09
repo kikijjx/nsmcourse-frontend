@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const bubbleSort = (arr: number[]) => {
   const n = arr.length;
@@ -42,6 +46,23 @@ const ExperimentContentPage: React.FC = () => {
   const [parallelResult, setParallelResult] = useState<number[] | null>(null);
   const [sequenceTime, setSequenceTime] = useState<number | null>(null);
   const [parallelTime, setParallelTime] = useState<number | null>(null);
+  const [chartData, setChartData] = useState<any>({
+    labels: [],
+    datasets: [
+      {
+        label: 'Последовательное время',
+        data: [],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.1,
+      },
+      {
+        label: 'Параллельное время',
+        data: [],
+        borderColor: 'rgba(153, 102, 255, 1)',
+        tension: 0.1,
+      },
+    ],
+  });
 
   const handleRunExperiment = () => {
     const array = Array.from({ length: numElements }, () => Math.floor(Math.random() * 1000));
@@ -57,6 +78,38 @@ const ExperimentContentPage: React.FC = () => {
       const endPar = performance.now();
       setParallelResult(parResult);
       setParallelTime(endPar - startPar);
+
+      setChartData((prevData) => ({
+        ...prevData,
+        labels: [...prevData.labels, `n=${numElements}, threads=${numThreads}`],
+        datasets: prevData.datasets.map((dataset, index) => ({
+          ...dataset,
+          data: [
+            ...dataset.data,
+            index === 0 ? endSeq - startSeq : endPar - startPar,
+          ],
+        })),
+      }));
+    });
+  };
+
+  const handleClearChart = () => {
+    setChartData({
+      labels: [],
+      datasets: [
+        {
+          label: 'Последовательное время',
+          data: [],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          tension: 0.1,
+        },
+        {
+          label: 'Параллельное время',
+          data: [],
+          borderColor: 'rgba(153, 102, 255, 1)',
+          tension: 0.1,
+        },
+      ],
     });
   };
 
@@ -83,16 +136,26 @@ const ExperimentContentPage: React.FC = () => {
           />
         </label>
       </div>
-      <button onClick={handleRunExperiment}>Run Experiment</button>
+      <button onClick={handleRunExperiment}>Сортировать</button>
+      <button onClick={handleClearChart}>Очистить график</button>
 
       <div>
         <h2>Результаты</h2>
         <p>Последовательный способ: {sequenceTime} мс</p>
         <p>Параллельный способ: {parallelTime} мс</p>
         <h3>Отсортированный массив (последовательно):</h3>
-        <pre>{JSON.stringify(sequenceResult, null, 2)}</pre>
+        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+          <p>{sequenceResult?.join(', ')}</p>
+        </div>
         <h3>Отсортированный массив (параллельно):</h3>
-        <pre>{JSON.stringify(parallelResult, null, 2)}</pre>
+        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+          <p>{parallelResult?.join(', ')}</p>
+        </div>
+      </div>
+
+      <div style={{ height: '400px', width: '100%' }}>
+        <h2>График времени выполнения</h2>
+        <Line data={chartData} />
       </div>
     </div>
   );
