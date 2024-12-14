@@ -1,5 +1,5 @@
 self.onmessage = function (e) {
-    const { chunk, threadIndex } = e.data;
+    const { chunk } = e.data;
     const sortedChunk = bubbleSort(chunk);
     postMessage(sortedChunk);
   };
