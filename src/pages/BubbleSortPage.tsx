@@ -62,30 +62,25 @@ const ExperimentContentPage: React.FC = () => {
   });
 
   const handleRunExperiment = () => {
-    // Создаем один массив для сортировки
     const array = Array.from({ length: numElements }, () => Math.floor(Math.random() * 1000));
   
-    // Копируем массив для последовательной сортировки
     const seqArray = [...array];
   
-    // Для последовательного вычисления
     const startSeq = performance.now();
-    const seqResult = bubbleSort(seqArray);  // Сортируем копию массива
+    const seqResult = bubbleSort(seqArray);
     const endSeq = performance.now();
     setSequenceResult(seqResult);
     setSequenceTime(endSeq - startSeq);
   
-    // Копируем массив для параллельной сортировки
     const parArray = [...array];
   
-    // Для параллельного вычисления
     const startPar = performance.now();
-    parallelBubbleSort(parArray, numThreads).then((parResult) => {  // Сортируем другую копию массива
+    parallelBubbleSort(parArray, numThreads).then((parResult) => {
       const endPar = performance.now();
       setParallelResult(parResult);
       setParallelTime(endPar - startPar);
   
-      setChartData((prevData) => ({
+      setChartData((prevData: { labels: string[]; datasets: { label: string; data: number[]; borderColor: string; tension: number }[] }) => ({
         ...prevData,
         labels: [...prevData.labels, `n=${numElements}, threads=${numThreads}`],
         datasets: prevData.datasets.map((dataset, index) => ({

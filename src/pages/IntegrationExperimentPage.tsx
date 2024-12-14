@@ -99,8 +99,7 @@ const IntegrationExperimentPage: React.FC = () => {
       setParallelResult(parResult);
       setParallelTime(endPar - startPar);
 
-      // Обновление данных для графика
-      setChartData((prevData) => ({
+      setChartData((prevData: { labels: string[]; datasets: { label: string; data: number[]; borderColor: string; tension: number }[] }) => ({
         ...prevData,
         labels: [...prevData.labels, `n=${n}, threads=${numThreads}`],
         datasets: prevData.datasets.map((dataset, index) => ({
