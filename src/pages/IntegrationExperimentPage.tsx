@@ -135,9 +135,11 @@ const IntegrationExperimentPage: React.FC = () => {
   };
 
   const generateFunctionGraph = () => {
-    const xValues = Array.from({ length: n + 1 }, (_, i) => a + i * (b - a) / n);
+    const adjustedN = Math.min(n, 10000);
+  
+    const xValues = Array.from({ length: adjustedN + 1 }, (_, i) => a + i * (b - a) / adjustedN);
     const yValues = xValues.map((x) => functions[selectedFunction](x));
-
+  
     return {
       labels: xValues,
       datasets: [
@@ -150,6 +152,7 @@ const IntegrationExperimentPage: React.FC = () => {
       ],
     };
   };
+  
 
   return (
     <div style={{ padding: '20px' }}>
