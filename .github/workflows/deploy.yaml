@@ -21,9 +21,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build the project
-      run: npm run build
-
     - name: Set up SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -34,11 +31,18 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
-    - name: Copy build files to remote server
+    - name: Copy source files to remote server
       env:
         USER: ${{ secrets.USER }}
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        scp -r ./build/* $USER@$HOST:$PROJECT_PATH
+        scp -r ./* $USER@$HOST:$PROJECT_PATH
 
+    - name: Run build on the server
+      env:
+        USER: ${{ secrets.USER }}
+        HOST: ${{ secrets.HOST }}
+        PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      run: |
+        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm run build"
