@@ -1,31 +1,44 @@
-name: CI/CD Pipeline
+name: Deploy Frontend
 
 on:
   push:
     branches:
       - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
         node-version: '20'
 
     - name: Install dependencies
       run: npm install
 
-    - name: Build project
+    - name: Build the project
       run: npm run build
+
+    - name: Set up SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOST: ${{ secrets.HOST }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+
+    - name: Copy build files to remote server
+      env:
+        USER: ${{ secrets.USER }}
+        HOST: ${{ secrets.HOST }}
+        PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      run: |
+        scp -r ./build/* $USER@$HOST:$PROJECT_PATH
 
