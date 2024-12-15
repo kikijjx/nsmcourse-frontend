@@ -18,9 +18,6 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
-
     - name: Set up SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -52,4 +49,4 @@ jobs:
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm audit fix && npm run build"
+        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm audit fix && npm run dev"
