@@ -1,6 +1,11 @@
 import axios from 'axios';
+import { API_URL } from "../config";
 
-const API_URL = "/api";
+
+export const getCourses = async () => {
+  const response = await axios.get(`${API_URL}/courses`);
+  return response.data;
+};
 
 export const getThemes = async () => {
   const response = await axios.get(`${API_URL}/themes`);

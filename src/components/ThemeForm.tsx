@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Button, Form, Select } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import FormulaInput from "./FormulaForm";
+import { getCourses } from "../services/themeService";
 
 interface ThemeFormProps {
   initialData?: {
@@ -24,7 +25,21 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
   const [description, setDescription] = useState(initialData?.description || "");
   const [content, setContent] = useState(initialData?.content || [{ type: "text", value: "" }]);
   const [courseId, setCourseId] = useState(initialData?.course_id || 1);
+  const [courses, setCourses] = useState<{ id: number; title: string }[]>([]);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const fetchedCourses = await getCourses();
+        setCourses(fetchedCourses);
+      } catch (err) {
+        setError("Не удалось загрузить список курсов");
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleContentChange = (index: number, field: string, value: string) => {
     const updatedContent = [...content];
@@ -117,15 +132,20 @@ const ThemeForm: React.FC<ThemeFormProps> = ({ initialData, onSubmit, errorMessa
           </Button>
         </Form.Item>
 
-        <Form.Item label="Курс">
-          <Input
-            id="courseId"
-            type="number"
+        <Form.Item label="Курс" required>
+          <Select
             value={courseId}
-            onChange={(e) => setCourseId(Number(e.target.value))}
-            required
-          />
+            onChange={(value) => setCourseId(value)}
+            style={{ width: "100%" }}
+          >
+            {courses.map(course => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.title}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
+
         <Button type="primary" htmlType="submit">
           {initialData ? "Сохранить изменения" : "Создать"}
         </Button>

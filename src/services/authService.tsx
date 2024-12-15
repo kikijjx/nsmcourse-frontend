@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "/api";
+import { API_URL } from "../config";
 
 export const login = async (email: string, password: string) => {
   const params = new URLSearchParams();

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "/api";
+import { API_URL } from "../config";
 
 export const getExperiments = async () => {
   const response = await axios.get(`${API_URL}/experiments`);
