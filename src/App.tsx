@@ -9,6 +9,7 @@ import IntegrationExperimentPage from './pages/IntegrationExperimentPage';
 import LoginPage from './pages/LoginPage';
 import CreateThemePage from './pages/CreateThemePage';
 import EditThemePage from './pages/EditThemePage';
+import ExperimentContentPage from './pages/ExperimentContentPage';
 
 const { Header, Content } = Layout;
 
@@ -51,6 +52,7 @@ const App: React.FC = () => {
             <Route path="/themes/new" element={<CreateThemePage />} />
             <Route path="/themes/:themeId/edit" element={<EditThemePage />} />
             <Route path="/experiments" element={<ExperimentsPage />} />
+            <Route path="/experiments/:experimentId" element={<ExperimentContentPage />} />
             <Route path="/experiments/bubble-sort" element={<BubbleSortPage />} />
             <Route path="/experiments/integration" element={<IntegrationExperimentPage />} />
             <Route path="/login" element={<LoginPage onLogin={() => setIsAdmin(true)} />} />
