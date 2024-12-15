@@ -35,16 +35,7 @@ jobs:
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
         rsync -avz --delete --exclude=".git" --exclude="node_modules" ./ $USER@$HOST:$PROJECT_PATH
-        - name: Install dependencies
-      run: npm install
-    
-    - name: Install TypeScript globally
-      env:
-        USER: ${{ secrets.USER }}
-        HOST: ${{ secrets.HOST }}
-      run: |
-        ssh $USER@$HOST "npm install -g typescript"
-        
+
     - name: Run build on the server
       env:
         USER: ${{ secrets.USER }}
