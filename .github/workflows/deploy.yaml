@@ -18,6 +18,9 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Install dependencies
+      run: npm install
+
     - name: Set up SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -36,10 +39,17 @@ jobs:
       run: |
         rsync -avz --delete --exclude=".git" --exclude="node_modules" ./ $USER@$HOST:$PROJECT_PATH
 
+    - name: Install TypeScript globally
+      env:
+        USER: ${{ secrets.USER }}
+        HOST: ${{ secrets.HOST }}
+      run: |
+        ssh $USER@$HOST "npm install -g typescript"
+
     - name: Run build on the server
       env:
         USER: ${{ secrets.USER }}
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm run dev"
+        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npx tsc -b && npm run build"
