@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import IntegrationExperimentPage from './IntegrationExperimentPage';
+import SLAEExperimentPage from './SLAEExperimentPage';
 
 const ExperimentContentPage: React.FC = () => {
   const { experimentId } = useParams<{ experimentId?: string }>();
@@ -9,6 +10,8 @@ const ExperimentContentPage: React.FC = () => {
     switch (id) {
       case '1':
         return <IntegrationExperimentPage />;
+      case '2':
+        return <SLAEExperimentPage />;
       default:
         return <div>Эксперимент не найден</div>;
     }
