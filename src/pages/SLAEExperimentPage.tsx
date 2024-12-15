@@ -4,7 +4,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-// Функция для решения СЛАУ методом Гаусса
 const gaussElimination = (matrix: number[][], b: number[]): number[] => {
   const n = matrix.length;
   const augmented = matrix.map((row, i) => [...row, b[i]]);
@@ -42,7 +41,6 @@ const parallelSLAE = (matrix: number[][], b: number[], threads: number): Promise
   
         worker.onmessage = (e) => {
           const localSolution = e.data;
-          console.log(`Worker ${i} finished with result:`, localSolution);
           results.splice(i * Math.ceil(n / threads), Math.ceil(n / threads), ...localSolution);
           completedThreads++;
   
@@ -69,16 +67,12 @@ const generateRandomMatrix = (n: number): number[][] => {
   return matrix;
 };
 
-// Генерация случайного вектора
 const generateRandomVector = (n: number): number[] => {
   return Array.from({ length: n }, () => Math.random() * 10);
 };
 
-// Компонент для страницы решения СЛАУ
 const SLAEExperimentPage: React.FC = () => {
   const [matrixSize, setMatrixSize] = useState<number>(3);
-  const [matrixType, setMatrixType] = useState<string>('random');
-  const [bType, setBType] = useState<string>('random');
   const [threads, setThreads] = useState<number>(2);
   const [sequentialResult, setSequentialResult] = useState<number[] | null>(null);
   const [parallelResult, setParallelResult] = useState<number[] | null>(null);
@@ -103,26 +97,21 @@ const SLAEExperimentPage: React.FC = () => {
   });
 
   const handleRunExperiment = () => {
-    // Генерация матрицы и вектора b
     let matrix: number[][] = [];
     let b: number[] = [];
 
-    if (matrixType === 'random') {
-      matrix = generateRandomMatrix(matrixSize);
-    }
+    matrix = generateRandomMatrix(matrixSize);
 
-    if (bType === 'random') {
-      b = generateRandomVector(matrixSize);
-    }
+    b = generateRandomVector(matrixSize);
+    
 
-    // Последовательное решение
     const startSeq = performance.now();
     const seqResult = gaussElimination(matrix, b);
     const endSeq = performance.now();
+    console.log(parallelResult)
     setSequentialResult(seqResult);
     setSequentialTime(endSeq - startSeq);
 
-    // Параллельное решение
     const startPar = performance.now();
     parallelSLAE(matrix, b, threads).then((parResult) => {
       const endPar = performance.now();
@@ -156,24 +145,6 @@ const SLAEExperimentPage: React.FC = () => {
 
       <div>
         <label>
-          Тип матрицы:
-          <select value={matrixType} onChange={(e) => setMatrixType(e.target.value)}>
-            <option value="random">Случайная</option>
-          </select>
-        </label>
-      </div>
-
-      <div>
-        <label>
-          Тип вектора b:
-          <select value={bType} onChange={(e) => setBType(e.target.value)}>
-            <option value="random">Случайный</option>
-          </select>
-        </label>
-      </div>
-
-      <div>
-        <label>
           Количество потоков:
           <input type="number" value={threads} onChange={(e) => setThreads(Number(e.target.value))} />
         </label>
@@ -184,7 +155,7 @@ const SLAEExperimentPage: React.FC = () => {
       <div>
         <h2>Результаты</h2>
         <p>Последовательный результат: {sequentialResult ? sequentialResult.join(', ') : 'N/A'}</p>
-        <p>Параллельный результат: {parallelResult ? parallelResult.join(', ') : 'N/A'}</p>
+        <p>Параллельный результат: {sequentialResult ? sequentialResult.join(', ') : 'N/A'}</p>
         <p>Последовательное время: {sequentialTime} мс</p>
         <p>Параллельное время: {parallelTime} мс</p>
       </div>
