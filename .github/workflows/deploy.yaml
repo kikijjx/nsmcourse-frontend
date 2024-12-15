@@ -52,4 +52,4 @@ jobs:
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npx tsc -b && npm run build"
+        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm audit fix && npm run build"
