@@ -43,10 +43,10 @@ jobs:
       run: |
         ssh $USER@$HOST "npm install -g typescript"
 
-    - name: Run build on the server
+    - name: Run Vite in detached mode
       env:
         USER: ${{ secrets.USER }}
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm audit fix && npm run dev"
+        ssh $USER@$HOST "cd $PROJECT_PATH && npm install && npm audit fix && nohup npm run dev > vite.log 2>&1 &"

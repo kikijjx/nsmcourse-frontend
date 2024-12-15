@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://45.15.156.106:8000";
+const API_URL = "http://79.141.77.97:8000";
 
 export const getThemes = async () => {
   const response = await axios.get(`${API_URL}/themes`);
