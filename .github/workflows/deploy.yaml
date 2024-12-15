@@ -20,7 +20,13 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-
+    - name: Install TypeScript globally
+      env:
+        USER: ${{ secrets.USER }}
+        HOST: ${{ secrets.HOST }}
+      run: |
+        ssh $USER@$HOST "npm install -g typescript"
+        
     - name: Set up SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
