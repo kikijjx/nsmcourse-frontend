@@ -31,13 +31,13 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
 
-    - name: Copy source files to remote server
+    - name: Sync source files to remote server with rsync
       env:
         USER: ${{ secrets.USER }}
         HOST: ${{ secrets.HOST }}
         PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       run: |
-        scp -r ./* $USER@$HOST:$PROJECT_PATH
+        rsync -avz --delete --exclude=".git" --exclude="node_modules" ./ $USER@$HOST:$PROJECT_PATH
 
     - name: Run build on the server
       env:
