@@ -52,7 +52,5 @@ jobs:
         NGINX_PATH: ${{ secrets.NGINX_PATH }}
       run: |
         ssh $USER@$HOST "
-          sudo rm -rf $NGINX_PATH/*
-          sudo cp -r $PROJECT_PATH/dist/* $NGINX_PATH/
           sudo systemctl restart nginx
         "
