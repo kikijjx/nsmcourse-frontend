@@ -6,7 +6,6 @@ import ExperimentsPage from './pages/ExperimentsPage';
 import ThemeContentPage from './pages/ThemeContentPage';
 import BubbleSortPage from './pages/BubbleSortPage';
 import IntegrationExperimentPage from './pages/IntegrationExperimentPage';
-
 import LoginPage from './pages/LoginPage';
 import CreateThemePage from './pages/CreateThemePage';
 import EditThemePage from './pages/EditThemePage';
@@ -16,30 +15,32 @@ const { Header, Content } = Layout;
 const App: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(!!localStorage.getItem('token'));
 
+  const menuItems = [
+    { key: '1', label: <Link to="/themes">Темы</Link> },
+    { key: '2', label: <Link to="/experiments">Эксперименты</Link> },
+    isAdmin
+      ? {
+          key: '3',
+          label: (
+            <Link
+              to="/login"
+              onClick={() => {
+                setIsAdmin(false);
+                localStorage.removeItem('token');
+              }}
+            >
+              Выйти
+            </Link>
+          ),
+        }
+      : { key: '3', label: <Link to="/login">Войти</Link> },
+  ];
+
   return (
     <Layout className="layout">
       <Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">
-            <Link to="/themes">Темы</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/experiments">Эксперименты</Link>
-          </Menu.Item>
-          {isAdmin && (
-            <Menu.Item key="3">
-              <Link to="/login" onClick={() => setIsAdmin(false)}>
-                Выйти
-              </Link>
-            </Menu.Item>
-          )}
-          {!isAdmin && (
-            <Menu.Item key="3">
-              <Link to="/login">Войти</Link>
-            </Menu.Item>
-          )}
-        </Menu>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
       </Header>
       <Content style={{ padding: '0 50px' }}>
         <div className="site-layout-content">
@@ -52,7 +53,6 @@ const App: React.FC = () => {
             <Route path="/experiments" element={<ExperimentsPage />} />
             <Route path="/experiments/bubble-sort" element={<BubbleSortPage />} />
             <Route path="/experiments/integration" element={<IntegrationExperimentPage />} />
-
             <Route path="/login" element={<LoginPage onLogin={() => setIsAdmin(true)} />} />
           </Routes>
         </div>

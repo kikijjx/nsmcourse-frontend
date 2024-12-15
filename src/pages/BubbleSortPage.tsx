@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ChartComponent from '../components/ChartComponent'; // Импортируем новый компонент для графика
+import ChartComponent from '../components/ChartComponent';
 
 const bubbleSort = (arr: number[]) => {
   const n = arr.length;
